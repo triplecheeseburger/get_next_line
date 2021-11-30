@@ -1,0 +1,3 @@
+/Users/hakim/get_next_line/get_next_line/clion_get_next_line/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/hakim/get_next_line/get_next_line/clion_get_next_line/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/hakim/get_next_line/get_next_line/clion_get_next_line/cmake-build-debug/CMakeFiles/clion_get_next_line.dir
