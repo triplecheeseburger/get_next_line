@@ -14,91 +14,85 @@
 
 char	*get_next_line(int fd)
 {
-	static char	*backup[10240];
-	char		*line;
+	static t_list	head;
+	t_list			*node;
+	char			*line;
 
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (0);
-	backup[fd] = gnl_read(backup[fd], fd);
-	if (!backup[fd])
-		return (NULL);
-	line = pick_line(backup[fd]);
-	backup[fd] = back_up(backup[fd]);
+	line = 0;
+	node = find_fd(&head, fd);
+	line = gnl(fd, node, line);
 	return (line);
 }
 
-char	*gnl_read(char *backup, int fd)
+t_list	*find_fd(t_list *head, int fd)
 {
-	char	*buffer;
-	int		rlen;
+	t_list	*temp;
 
-	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (buffer == 0)
-		return (0);
-	rlen = 1;
-	while (rlen > 0 && nl_loc(backup) == -1)
+	temp = head;
+	while (temp->next != 0)
 	{
-		rlen = read(fd, buffer, BUFFER_SIZE);
-		if (rlen == 0)
-			break ;
-		if (rlen == -1)
+		if (temp->fd == fd)
+			return (temp);
+		temp = temp->next;
+	}
+	temp->next = malloc(sizeof(t_list));
+	temp->next->fd = fd;
+	temp->next->prev = temp;
+	return (temp->next);
+}
+
+char	*gnl(int fd, t_list *node, char *line)
+{
+	int	rlen;
+
+	rlen = nl_loc(node->buffer, LEN);
+	if (node->buffer[0] == '\0')
+		rlen = read(fd, node->buffer, BUFFER_SIZE);
+	while (rlen > 0)
+	{
+		line = put_or_cut(node->buffer, line);
+		if (node->buffer[0] == '\0')
+			rlen = read(fd, node->buffer, BUFFER_SIZE);
+		else if (node->buffer[0] == -1)
 		{
-			free(buffer);
-			return (NULL);
+			gnl_memmove(node->buffer, node->buffer + BUFFER_SIZE, BUFFER_SIZE);
+			break ;
 		}
-		buffer[rlen] = '\0';
-		backup = ft_strjoin(backup, buffer);
+		else
+			break ;
 	}
-	free(buffer);
-	return (backup);
-}
-
-char	*pick_line(char *backup)
-{
-	char	*line;
-	int		len;
-	int		ldex;
-
-	len = 0;
-	if (backup[0] == '\0')
-		return (0);
-	while (backup[len] != '\0' && backup[len] != '\n')
-		++len;
-	if (backup[len] == '\n')
-		++len;
-	line = malloc(sizeof(char) * (len + 1));
-	if (line == 0)
-		return (0);
-	ldex = -1;
-	while (++ldex < len)
-		line[ldex] = backup[ldex];
-	line[ldex] = '\0';
+	if (rlen <= 0)
+		free_node(node);
 	return (line);
 }
 
-char	*back_up(char *backup)
+void	free_node(t_list *node)
 {
-	char	*new;
-	int		index;
-	int		deldex;
+	node->prev->next = node->next;
+	node->next->prev = node->prev;
+	free(node);
+	node = 0;
+}
 
-	deldex = 0;
-	while (backup[deldex] != '\0' && backup[deldex] != '\n')
-		++deldex;
-	if (backup[deldex] == '\n')
-		++deldex;
-	if (backup[deldex] == '\0')
+char	*put_or_cut(char *buffer, char *line)
+{
+	int	nl;
+
+	nl = nl_loc(buffer, NL);
+	if (buffer[0] == -1)
+		buffer[0] = '\0';
+	if (nl != -1)
 	{
-		free(backup);
-		return (0);
+		line = nl_strjoin(line, buffer, nl);
+		gnl_memmove(buffer, buffer + nl + 1, BUFFER_SIZE);
+		if (nl == BUFFER_SIZE - 1)
+			buffer[0] = -1;
+		return (line);
 	}
-	new = malloc(sizeof(char) * (ft_strlen(backup) - deldex + 1));
-	if (new == 0)
-		return (0);
-	index = 0;
-	while (backup[deldex] != '\0')
-		new[index++] = backup[deldex++];
-	new[index] = '\0';
-	free(backup);
-	return (new);
+	else
+		line = nl_strjoin(line, buffer, BUFFER_SIZE - 1);
+	gnl_memmove(buffer, buffer + BUFFER_SIZE, BUFFER_SIZE);
+	return (line);
 }

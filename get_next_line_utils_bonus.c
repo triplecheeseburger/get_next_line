@@ -11,74 +11,66 @@
 /* ************************************************************************** */
 #include "get_next_line_bonus.h"
 
-int	nl_loc(char *s)
+char	*nl_strjoin(char *line, char *buffer, int nl)
+{
+	int		len;
+	int		index;
+	int		bufdex;
+	char	*result;
+
+	if (line == 0 && buffer == 0)
+		return (0);
+	len = nl_loc(line, LEN) + nl + 1;
+	result = malloc(sizeof(char) * (len + 1));
+	if (result == 0)
+		return (0);
+	index = 0;
+	while (line && line[index] != '\0')
+	{
+		result[index] = line[index];
+		++index;
+	}
+	bufdex = 0;
+	while (bufdex <= nl)
+		result[index++] = buffer[bufdex++];
+	result[index] = '\0';
+	free(line);
+	line = 0;
+	return (result);
+}
+
+int	nl_loc(char *s, int mode)
 {
 	int	index;
 
 	if (s == 0)
+		return (0);
+	index = 0;
+	if (mode == NL)
+	{
+		while (s[index] != '\0')
+		{
+			if (s[index] == '\n')
+				return (index);
+			++index;
+		}
 		return (-1);
-	index = 0;
-	while (s[index] != '\0')
-	{
-		if (s[index] == '\n')
-			return (index);
-		++index;
 	}
-	return (-1);
+	else
+	{
+		while (s[index] != '\0')
+			++index;
+		return (index);
+	}
 }
 
-size_t	ft_strlen(const char *str)
+void	gnl_memmove(char *dst, char *src, size_t n)
 {
-	size_t	count;
-
-	count = 0;
-	while (str[count] != '\0')
-		count++;
-	return (count);
-}
-
-char	*ft_strjoin(char *s1, char *s2)
-{
-	size_t	len;
 	size_t	index;
-	char	*result;
 
-	if (s1 == 0 && s2 == 0)
-		return (0);
-	else if (s1 == 0)
-		return (ft_strdup(s2));
-	else if (s2 == 0)
-		return (ft_strdup(s1));
-	len = ft_strlen((char *)s1);
-	len += ft_strlen((char *)s2);
-	result = malloc(sizeof(char) * (len + 1));
-	if (result == 0)
-		return (0);
 	index = -1;
-	while (s1[++index] != '\0')
-		result[index] = s1[index];
-	while (*s2 != '\0')
-		result[index++] = *s2++;
-	result[index] = '\0';
-	free(s1);
-	return (result);
-}
-
-char	*ft_strdup(const char *src)
-{
-	char	*dest;
-	size_t	len;
-	size_t	index;
-
-	len = ft_strlen(src);
-	dest = (char *)malloc(sizeof(char) * (len + 1));
-	if (dest == 0)
-		return (0);
-	index = 0;
-	while (index <= len)
-	{
-		dest[index] = src[index];
-		index++;
-	}
-	return (dest);
+	while (src[++index] != '\0')
+		dst[index] = src[index];
+	while (index < n)
+		dst[index++] = '\0';
 }

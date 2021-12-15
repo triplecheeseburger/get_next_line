@@ -6,7 +6,7 @@
 /*   By: hakim <hakim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 11:12:00 by hakim             #+#    #+#             */
-/*   Updated: 2021/11/29 20:06:23 by hakim            ###   ########.fr       */
+/*   Updated: 2021/11/30 16:37:04 by hakim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (0);
 	line = 0;
-	rlen = ft_strlen(buffer);
+	rlen = nl_loc(buffer, LEN);
 	if (buffer[0] == '\0')
 		rlen = read(fd, buffer, BUFFER_SIZE);
 	while (rlen > 0)
@@ -31,7 +31,7 @@ char	*get_next_line(int fd)
 			rlen = read(fd, buffer, BUFFER_SIZE);
 		else if (buffer[0] == -1)
 		{
-			flush_buffer(buffer);
+			gnl_memmove(buffer, buffer + BUFFER_SIZE, BUFFER_SIZE);
 			break ;
 		}
 		else
@@ -44,7 +44,7 @@ char	*put_or_cut(char *buffer, char *line)
 {
 	int	nl;
 
-	nl = nl_loc(buffer);
+	nl = nl_loc(buffer, NL);
 	if (buffer[0] == -1)
 		buffer[0] = '\0';
 	if (nl != -1)
@@ -56,18 +56,7 @@ char	*put_or_cut(char *buffer, char *line)
 		return (line);
 	}
 	else
-		line = ft_strjoin(line, buffer);
-	flush_buffer(buffer);
+		line = nl_strjoin(line, buffer, BUFFER_SIZE - 1);
+	gnl_memmove(buffer, buffer + BUFFER_SIZE, BUFFER_SIZE);
 	return (line);
-}
-
-void	gnl_memmove(char *dst, char *src, size_t n)
-{
-	size_t	index;
-
-	index = -1;
-	while (src[++index] != '\0')
-		dst[index] = src[index];
-	if (index < n)
-		dst[index] = '\0';
 }

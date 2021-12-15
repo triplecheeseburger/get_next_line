@@ -16,13 +16,24 @@
 # include <unistd.h>
 # include <stdlib.h>
 
+# define NL -1
+# define LEN 1
+
+typedef struct	s_list
+{
+	char			buffer[BUFFER_SIZE + 1];
+	int 			fd;
+	struct s_list	*prev;
+	struct s_list	*next;
+}	t_list;
+
 char	*get_next_line(int fd);
-char	*gnl_read(char *backup, int fd);
-char	*pick_line(char *backup);
-char	*back_up(char *backup);
-char	*ft_strjoin(char *s1, char *s2);
-char	*ft_strdup(const char *src);
-int		nl_loc(char *s);
-size_t	ft_strlen(const char *str);
+char	*gnl(int fd, t_list *buffer, char *line);
+char	*put_or_cut(char *buffer, char *line);
+char	*nl_strjoin(char *line, char *buffer, int nl);
+int		nl_loc(char *s, int mode);
+void	gnl_memmove(char *dst, char *src, size_t n);
+void	free_node(t_list *node);
+t_list	*find_fd(t_list *head, int fd);
 
 #endif
