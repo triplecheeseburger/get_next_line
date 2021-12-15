@@ -18,6 +18,7 @@
 
 # define NL -1
 # define LEN 1
+# define BUFFER_SIZE 1
 
 typedef struct	s_list
 {

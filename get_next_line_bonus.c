@@ -22,6 +22,8 @@ char	*get_next_line(int fd)
 		return (0);
 	line = 0;
 	node = find_fd(&head, fd);
+	if (node == 0)
+		return (0);
 	line = gnl(fd, node, line);
 	return (line);
 }
@@ -38,6 +40,8 @@ t_list	*find_fd(t_list *head, int fd)
 		temp = temp->next;
 	}
 	temp->next = malloc(sizeof(t_list));
+	if (temp->next == 0)
+		return (0);
 	temp->next->fd = fd;
 	temp->next->prev = temp;
 	return (temp->next);
@@ -70,8 +74,13 @@ char	*gnl(int fd, t_list *node, char *line)
 
 void	free_node(t_list *node)
 {
-	node->prev->next = node->next;
-	node->next->prev = node->prev;
+
+	if (node->prev != 0)
+		node->prev->next = node->next;
+	if (node->next != 0)
+		node->next->prev = node->prev;
+	if (node->fd == 0)
+		return ;
 	free(node);
 	node = 0;
 }
