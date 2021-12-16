@@ -19,7 +19,7 @@ int	main(void)
 	char	*line;
 	int		fd;
 
-	fd = open("/Users/hakim/get_next_line/41_no_nl", O_RDONLY);
+	fd = open("nl", O_RDONLY);
 	line = get_next_line(fd);
 	while (line)
 	{

@@ -39,11 +39,16 @@ t_list	*find_fd(t_list *head, int fd)
 			return (temp);
 		temp = temp->next;
 	}
+	if (temp->fd == fd)
+		return (temp);
 	temp->next = malloc(sizeof(t_list));
 	if (temp->next == 0)
 		return (0);
+	temp->next->buffer[0] = '\0';
+	temp->next->buffer[BUFFER_SIZE + 1] = '\0';
 	temp->next->fd = fd;
 	temp->next->prev = temp;
+	temp->next->next = 0;
 	return (temp->next);
 }
 
@@ -70,19 +75,6 @@ char	*gnl(int fd, t_list *node, char *line)
 	if (rlen <= 0)
 		free_node(node);
 	return (line);
-}
-
-void	free_node(t_list *node)
-{
-
-	if (node->prev != 0)
-		node->prev->next = node->next;
-	if (node->next != 0)
-		node->next->prev = node->prev;
-	if (node->fd == 0)
-		return ;
-	free(node);
-	node = 0;
 }
 
 char	*put_or_cut(char *buffer, char *line)

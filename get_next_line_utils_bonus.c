@@ -74,3 +74,15 @@ void	gnl_memmove(char *dst, char *src, size_t n)
 	while (index < n)
 		dst[index++] = '\0';
 }
+
+void	free_node(t_list *node)
+{
+	if (node->prev != 0)
+		node->prev->next = node->next;
+	if (node->next != 0)
+		node->next->prev = node->prev;
+	if (node->fd == 0)
+		return ;
+	free(node);
+	node = 0;
+}

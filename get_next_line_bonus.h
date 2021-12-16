@@ -18,12 +18,11 @@
 
 # define NL -1
 # define LEN 1
-# define BUFFER_SIZE 1
 
-typedef struct	s_list
+typedef struct s_list
 {
 	char			buffer[BUFFER_SIZE + 1];
-	int 			fd;
+	int				fd;
 	struct s_list	*prev;
 	struct s_list	*next;
 }	t_list;
