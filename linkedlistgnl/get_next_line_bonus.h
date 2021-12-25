@@ -32,6 +32,7 @@ char	*gnl(int fd, t_list *buffer, char *line);
 char	*put_or_cut(char *buffer, char *line);
 char	*nl_strjoin(char *line, char *buffer, int nl);
 int		nl_loc(char *s, int mode);
+int		gnl_read(int fd, char *buffer);
 void	gnl_memmove(char *dst, char *src, size_t n);
 void	free_node(t_list *node);
 t_list	*find_fd(t_list *head, int fd);

@@ -6,7 +6,7 @@
 /*   By: hakim <hakim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 11:12:00 by hakim             #+#    #+#             */
-/*   Updated: 2021/12/17 23:43:53 by hakim            ###   ########.fr       */
+/*   Updated: 2021/12/18 01:17:12 by hakim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ char	*get_next_line(int fd)
 t_list	*find_fd(t_list *head, int fd)
 {
 	t_list	*temp;
-	int		i;
 
 	temp = head;
 	while (temp->next != 0)
@@ -45,9 +44,8 @@ t_list	*find_fd(t_list *head, int fd)
 	temp->next = malloc(sizeof(t_list));
 	if (temp->next == 0)
 		return (0);
-	i = -1;
-	while (++i < BUFFER_SIZE)
-		temp->next->buffer[i] = '\0';
+	temp->next->buffer[0] = '\0';
+	temp->next->buffer[BUFFER_SIZE] = '\0';
 	temp->next->fd = fd;
 	temp->next->prev = temp;
 	temp->next->next = 0;
@@ -60,12 +58,12 @@ char	*gnl(int fd, t_list *node, char *line)
 
 	rlen = nl_loc(node->buffer, LEN);
 	if (node->buffer[0] == '\0')
-		rlen = read(fd, node->buffer, BUFFER_SIZE);
+		rlen = gnl_read(fd, node->buffer);
 	while (rlen > 0)
 	{
 		line = put_or_cut(node->buffer, line);
 		if (node->buffer[0] == '\0')
-			rlen = read(fd, node->buffer, BUFFER_SIZE);
+			rlen = gnl_read(fd, node->buffer);
 		else if (node->buffer[0] == -1)
 		{
 			gnl_memmove(node->buffer, node->buffer + BUFFER_SIZE, BUFFER_SIZE);
@@ -77,6 +75,16 @@ char	*gnl(int fd, t_list *node, char *line)
 	if (rlen <= 0)
 		free_node(node);
 	return (line);
+}
+
+int	gnl_read(int fd, char *buffer)
+{
+	int	rlen;
+
+	rlen = read(fd, buffer, BUFFER_SIZE);
+	if (rlen > 0)
+		buffer[rlen] = '\0';
+	return (rlen);
 }
 
 char	*put_or_cut(char *buffer, char *line)
