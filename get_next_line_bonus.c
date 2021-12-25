@@ -44,12 +44,14 @@ char	*gnl_read(char *backup, int fd)
 		if (rlen == -1)
 		{
 			free(buffer);
+			buffer = 0;
 			return (NULL);
 		}
 		buffer[rlen] = '\0';
 		backup = ft_strjoin(backup, buffer);
 	}
 	free(buffer);
+	buffer = 0;
 	return (backup);
 }
 
@@ -90,6 +92,7 @@ char	*back_up(char *backup)
 	if (backup[deldex] == '\0')
 	{
 		free(backup);
+		backup = 0;
 		return (0);
 	}
 	new = malloc(sizeof(char) * (ft_strlen(backup) - deldex + 1));
@@ -100,5 +103,6 @@ char	*back_up(char *backup)
 		new[index++] = backup[deldex++];
 	new[index] = '\0';
 	free(backup);
+	backup = 0;
 	return (new);
 }

@@ -61,6 +61,7 @@ char	*ft_strjoin(char *s1, char *s2)
 		result[index++] = *s2++;
 	result[index] = '\0';
 	free(s1);
+	s1 = 0;
 	return (result);
 }
 
