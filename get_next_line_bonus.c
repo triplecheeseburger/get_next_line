@@ -17,7 +17,7 @@ char	*get_next_line(int fd)
 	static char	*backup[OPEN_MAX];
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE < 1)
+	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE < 1)
 		return (0);
 	backup[fd] = gnl_read(backup[fd], fd);
 	if (!backup[fd])
