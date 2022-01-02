@@ -13,6 +13,8 @@
 #include "get_next_line.h"
 #include <stdio.h>
 #include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
 
 int	main(void)
 {
@@ -21,7 +23,7 @@ int	main(void)
 //	int		a = 2000;
 //	int		i;
 
-	fd = 0;//open("1", O_RDONLY);	
+	fd = open("nl", O_RDONLY);
 //	fd[1] = open("1", O_RDONLY);
 //	fd[2] = open("1", O_RDONLY);
 //	fd[3] = open("1", O_RDONLY);
@@ -34,7 +36,7 @@ int	main(void)
 //		if (i == 5)
 //			i = 0;
 //		if (line)
-		printf("%s", line);
+		write(1, line, strlen(line));
 		free(line);
 		line = get_next_line(fd);
 //		i++;

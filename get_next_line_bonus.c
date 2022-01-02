@@ -14,16 +14,23 @@
 
 char	*get_next_line(int fd)
 {
-	static char	*backup[OPEN_MAX];
-	char		*line;
+	static t_list	head;
+	t_list			*node;
+	char			*line;
 
-	if (fd < 0 || fd > OPEN_MAX || BUFFER_SIZE < 1)
+	if (fd < 0 || BUFFER_SIZE < 1)
 		return (0);
-	backup[fd] = gnl_read(backup[fd], fd);
-	if (!backup[fd])
-		return (NULL);
-	line = pick_line(backup[fd]);
-	backup[fd] = back_up(backup[fd]);
+	node = find_fd(&head, fd);
+	if (node == 0)
+		return (0);
+	node->backup = gnl_read(node->backup, fd);
+	if (node->backup == 0)
+	{
+		free_node(node);
+		return (0);
+	}
+	line = pick_line(node->backup);
+	node->backup = back_up(node->backup);
 	return (line);
 }
 
@@ -45,7 +52,7 @@ char	*gnl_read(char *backup, int fd)
 		{
 			free(buffer);
 			buffer = 0;
-			return (NULL);
+			return (0);
 		}
 		buffer[rlen] = '\0';
 		backup = ft_strjoin(backup, buffer);
@@ -105,4 +112,27 @@ char	*back_up(char *backup)
 	free(backup);
 	backup = 0;
 	return (new);
+}
+
+t_list	*find_fd(t_list *head, int fd)
+{
+	t_list	*temp;
+
+	temp = head;
+	while (temp->next != 0)
+	{
+		if (temp->fd == fd)
+			return (temp);
+		temp = temp->next;
+	}
+	if (temp->fd == fd)
+		return (temp);
+	temp->next = malloc(sizeof(t_list));
+	if (temp->next == 0)
+		return (0);
+	temp->next->backup = 0;
+	temp->next->fd = fd;
+	temp->next->prev = temp;
+	temp->next->next = 0;
+	return (temp->next);
 }

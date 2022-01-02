@@ -15,8 +15,16 @@
 
 # include <unistd.h>
 # include <stdlib.h>
-
-# define OPEN_MAX 12800
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
+typedef struct s_list
+{
+	char			*backup;
+	int				fd;
+	struct s_list	*prev;
+	struct s_list	*next;
+}	t_list;
 
 char	*get_next_line(int fd);
 char	*gnl_read(char *backup, int fd);
@@ -26,5 +34,7 @@ char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strdup(const char *src);
 int		nl_loc(char *s);
 size_t	ft_strlen(const char *str);
+void	free_node(t_list *node);
+t_list	*find_fd(t_list *head, int fd);
 
 #endif

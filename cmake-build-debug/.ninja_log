@@ -1,0 +1,6 @@
+# ninja log v5
+1	97	1641132721736083126	CMakeFiles/get_next_line.dir/main2.c.o	9870c5f913668e1e
+0	98	1641132721736083126	CMakeFiles/get_next_line.dir/get_next_line_utils_bonus.c.o	67766c39059ab76f
+1	43	1641132753997603097	CMakeFiles/get_next_line.dir/get_next_line_bonus.c.o	37eae7208f8c2115
+1	45	1641132753997603097	CMakeFiles/get_next_line.dir/get_next_line_utils_bonus.c.o	67766c39059ab76f
+45	73	1641132754029604600	get_next_line	a88a38012a9b39d0

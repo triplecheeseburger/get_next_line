@@ -83,3 +83,15 @@ char	*ft_strdup(const char *src)
 	}
 	return (dest);
 }
+
+void	free_node(t_list *node)
+{
+	if (node->prev != 0)
+		node->prev->next = node->next;
+	if (node->next != 0)
+		node->next->prev = node->prev;
+	if (node->fd == 0)
+		return ;
+	free(node);
+	node = 0;
+}

@@ -28,28 +28,53 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
+//t_list	*find_fd(t_list *head, int fd)
+//{
+//	t_list	*temp;
+//
+//	temp = head;
+//	while (temp->next != 0)
+//	{
+//		if (temp->fd == fd)
+//			return (temp);
+//		temp = temp->next;
+//	}
+//	if (temp->fd == fd)
+//		return (temp);
+//	temp->next = malloc(sizeof(t_list));
+//	if (temp->next == 0)
+//		return (0);
+//	temp->next->buffer[0] = '\0';
+//	temp->next->buffer[BUFFER_SIZE] = '\0';
+//	temp->next->fd = fd;
+//	temp->next->prev = temp;
+//	temp->next->next = 0;
+//	return (temp->next);
+//}
+
 t_list	*find_fd(t_list *head, int fd)
 {
 	t_list	*temp;
+	t_list	*prev;
 
 	temp = head;
-	while (temp->next != 0)
+	prev = 0;
+	while (temp != 0)
 	{
 		if (temp->fd == fd)
 			return (temp);
+		prev = temp;
 		temp = temp->next;
 	}
-	if (temp->fd == fd)
-		return (temp);
-	temp->next = malloc(sizeof(t_list));
-	if (temp->next == 0)
+	temp = malloc(sizeof(t_list));
+	if (temp == 0)
 		return (0);
-	temp->next->buffer[0] = '\0';
-	temp->next->buffer[BUFFER_SIZE] = '\0';
-	temp->next->fd = fd;
-	temp->next->prev = temp;
-	temp->next->next = 0;
-	return (temp->next);
+	temp->buffer[0] = '\0';
+	temp->buffer[BUFFER_SIZE] = '\0';
+	temp->fd = fd;
+	temp->prev = prev;
+	temp->next = 0;
+	return (temp);
 }
 
 char	*gnl(int fd, t_list *node, char *line)
