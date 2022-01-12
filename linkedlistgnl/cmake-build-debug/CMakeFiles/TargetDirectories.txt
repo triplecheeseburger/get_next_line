@@ -1,3 +1,0 @@
-/home/han/42/42cursus/1_circle/get_next_line/get_next_line/linkedlistgnl/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/han/42/42cursus/1_circle/get_next_line/get_next_line/linkedlistgnl/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/han/42/42cursus/1_circle/get_next_line/get_next_line/linkedlistgnl/cmake-build-debug/CMakeFiles/linkedlistgnl.dir

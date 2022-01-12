@@ -1,6 +1,0 @@
-# ninja log v5
-0	104	1641131749481139382	CMakeFiles/linkedlistgnl.dir/get_next_line_utils.c.o	b226f5fd2ad021d1
-0	104	1641131749485139532	CMakeFiles/linkedlistgnl.dir/get_next_line_utils_bonus.c.o	ac75f540a5036896
-0	101	1641131749481139382	CMakeFiles/linkedlistgnl.dir/get_next_line_bonus.c.o	884dca270da0e43a
-2	104	1641131749485139532	CMakeFiles/linkedlistgnl.dir/main2.c.o	6adbde85a3fa6e29
-1	35	1641131774294066966	linkedlistgnl	fa2780cd0fa0438e
